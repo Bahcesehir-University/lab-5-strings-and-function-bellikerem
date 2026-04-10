@@ -63,13 +63,13 @@ public:
     MyString replace(const string& oldStr, const string& newStr) const;
 
     // ---- Operator Overloading ----
-    MyString operator+(const MyString& other) const;   // Concatenation
-    bool operator==(const MyString& other) const;       // Equality
-    bool operator!=(const MyString& other) const;       // Inequality
-    bool operator<(const MyString& other) const;        // Less than
-    bool operator>(const MyString& other) const;        // Greater than
-    char operator[](int index) const;                    // Indexing
-    MyString operator*(int times) const;                 // Repeat
+    MyString operator+(const MyString& other) const;
+    bool operator==(const MyString& other) const;
+    bool operator!=(const MyString& other) const;
+    bool operator<(const MyString& other) const;
+    bool operator>(const MyString& other) const;
+    char operator[](int index) const;
+    MyString operator*(int times) const;
 
     // ---- Stream Overloading ----
     friend ostream& operator<<(ostream& os, const MyString& s);
@@ -94,7 +94,17 @@ MyString::MyString(const char* str) {
     data = str;
 }
 
+// ---- Getter ----
+
+string MyString::getData() const {
+    return data;
+}
+
 // ---- Basic String Operations ----
+
+int MyString::length() const {
+    return data.length();
+}
 
 char MyString::charAt(int index) const {
     if (index < 0 || index >= data.length()) {
@@ -212,7 +222,6 @@ bool MyString::operator<(const MyString& other) const {
     return data < other.data;
 }
 
-
 bool MyString::operator>(const MyString& other) const {
     return data > other.data;
 }
@@ -253,83 +262,41 @@ istream& operator>>(istream& is, MyString& s) {
 int main() {
     cout << "=== MyString Lab Demo ===" << endl;
 
-    // --- Constructors ---
     MyString s1("Hello World");
     MyString s2("hello world");
     MyString s3;
     MyString s4(string("C++ Programming"));
 
-    // --- 1. Basic Operations ---
     cout << "\n--- Basic Operations ---" << endl;
     cout << "s1: " << s1 << endl;
     cout << "s4: " << s4 << endl;
     cout << "Length of s1: " << s1.length() << endl;
-    cout << "charAt(0) of s1: " << s1.charAt(0) << endl;
-    cout << "charAt(6) of s1: " << s1.charAt(6) << endl;
-    cout << "substring(0,5) of s1: " << s1.substring(0, 5) << endl;
-    cout << "substring(6,5) of s1: " << s1.substring(6, 5) << endl;
+    cout << "charAt(0): " << s1.charAt(0) << endl;
+    cout << "substring(0,5): " << s1.substring(0, 5) << endl;
 
-    // --- 2. String Manipulation ---
     cout << "\n--- String Manipulation ---" << endl;
-    cout << "toUpperCase of s1: " << s1.toUpperCase() << endl;
-    cout << "toLowerCase of s1: " << s1.toLowerCase() << endl;
+    cout << s1.toUpperCase() << endl;
+    cout << s1.toLowerCase() << endl;
 
-    MyString padded("   spaces around   ");
-    cout << "Before trim: [" << padded << "]" << endl;
-    cout << "After  trim: [" << padded.trim() << "]" << endl;
+    MyString padded("   test   ");
+    cout << "[" << padded.trim() << "]" << endl;
+    cout << s1.reverse() << endl;
 
-    cout << "Reverse of s1: " << s1.reverse() << endl;
+    cout << "\n--- Search ---" << endl;
+    cout << s1.find(MyString("World")) << endl;
+    cout << s1.count('l') << endl;
 
-    // --- 3. Search Operations ---
-    cout << "\n--- Search Operations ---" << endl;
-    cout << "find 'World' in s1: " << s1.find(MyString("World")) << endl;
-    cout << "find 'xyz' in s1:   " << s1.find(MyString("xyz")) << endl;
-    cout << "count 'l' in s1:    " << s1.count('l') << endl;
-    cout << "count 'z' in s1:    " << s1.count('z') << endl;
-
-    // --- 4. Function Overloading: append ---
-    cout << "\n--- Function Overloading: append ---" << endl;
+    cout << "\n--- Append ---" << endl;
     MyString base("Data");
-    cout << "append(MyString): " << base.append(MyString("Base")) << endl;
-    cout << "append(C-str):    " << base.append("_v2") << endl;
-    cout << "append(char):     " << base.append('!') << endl;
-    cout << "append(int):      " << base.append(42) << endl;
+    cout << base.append("Base") << endl;
+    cout << base.append(10) << endl;
 
-    // --- 5. Function Overloading: replace ---
-    cout << "\n--- Function Overloading: replace ---" << endl;
-    MyString rep("aabcaabc");
-    cout << "Original:                " << rep << endl;
-    cout << "replace('a','x'):        " << rep.replace('a', 'x') << endl;
-    cout << "replace(\"abc\",\"XYZ\"): " << rep.replace(string("abc"), string("XYZ")) << endl;
+    cout << "\n--- Operators ---" << endl;
+    MyString a("Hi"), b("There");
+    cout << a + b << endl;
+    cout << (a == b) << endl;
+    cout << a * 3 << endl;
 
-    // --- 6. Operator Overloading ---
-    cout << "\n--- Operator Overloading ---" << endl;
-    MyString a("Hello");
-    MyString b(" World");
-    MyString c("Hello");
-
-    cout << "a + b:  " << a + b << endl;
-    cout << "a == c: " << (a == c) << endl;
-    cout << "a == b: " << (a == b) << endl;
-    cout << "a != b: " << (a != b) << endl;
-
-    MyString apple("Apple");
-    MyString banana("Banana");
-    cout << "Apple < Banana: " << (apple < banana) << endl;
-    cout << "Banana > Apple: " << (banana > apple) << endl;
-
-    cout << "a[0]: " << a[0] << endl;
-    cout << "a[4]: " << a[4] << endl;
-
-    cout << "a * 3: " << a * 3 << endl;
-    cout << "a * 0: [" << a * 0 << "]" << endl;
-
-    // --- 7. Stream Operators ---
-    cout << "\n--- Stream Operators ---" << endl;
-    MyString x("Stream");
-    MyString y("Test");
-    cout << "Chained output: " << x << " " << y << endl;
-
-    cout << "\nAll demos complete!" << endl;
+    cout << "\nDone!" << endl;
     return 0;
 }
